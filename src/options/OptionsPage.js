@@ -12,7 +12,7 @@ import {
   Space,
   Card,
 } from "antd";
-import { DeleteOutlined } from "@ant-design/icons";
+import { DeleteOutlined, UpOutlined, DownOutlined } from "@ant-design/icons";
 import "./OptionsPage.css";
 
 class OptionsPage extends React.Component {
@@ -110,26 +110,36 @@ class OptionsPage extends React.Component {
               {this.i18n("config_title_custom_rule")}
             </Typography.Title>
             <Form.List name="rules">
-              {(rules, { add, remove }) => (
+              {(rules, { add, remove, move }) => (
                 <Space
                   direction="vertical"
                   size="small"
                   style={{ display: "flex" }}
                 >
-                  {rules.map((rule) => (
+                  {rules.map((rule, i) => (
                     <Card
                       size="small"
                       key={rule.key}
                       hoverable
                       style={{ border: "1px solid #B5B5B5" }}
                       extra={
-                        <DeleteOutlined
-                          onClick={() => {
+                        <>
+                          {rules.length > 1 && i > 0 && <UpOutlined style={{ marginRight: "8px" }} onClick={() => {
+                            if (this.state.isEditting) {
+                              move(i, i - 1);
+                            }
+                          }} />}
+                          {i < rules.length - 1 && <DownOutlined style={{ marginRight: "8px" }} onClick={() => {
+                            if (this.state.isEditting) {
+                              move(i, i + 1);
+                            }
+                          }} />}
+                          <DeleteOutlined onClick={() => {
                             if (this.state.isEditting) {
                               remove(rule.name);
                             }
-                          }}
-                        />
+                          }} />
+                        </>
                       }
                     >
                       <Form.Item
